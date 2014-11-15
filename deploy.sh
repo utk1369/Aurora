@@ -13,6 +13,10 @@ then
     then
         echo "Running actual deploy"
         rsync -az --force --delete --progress --exclude-from=rsync_exclude.txt -e "ssh -p9999" ./Web\ Interface/ dcadmin@172.16.32.222:/srv/http/aurora
+    elif [ $2 == "test" ]
+    then
+        echo "Running actual deploy on test"
+        rsync -az --force --delete --progress --exclude-from=rsync_exclude.txt -e "ssh -p9999" ./Web\ Interface/ dcadmin@172.16.32.222:/srv/http/auroraTest
     else
         echo $ERRORSTRING;
     fi
