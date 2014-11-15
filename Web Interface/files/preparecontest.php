@@ -1,5 +1,3 @@
-/** @author: utk
-  */
 <?php
 include_once '../functions.php';
 

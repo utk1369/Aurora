@@ -29,8 +29,6 @@ if ($judge['value'] != "Lockdown" || (isset($_SESSION['loggedin']) && $_SESSION[
                 if (isset($_SESSION['loggedin']) && $_SESSION['team']['status'] == 'Admin') {
                     $query = "select * from problems where pgroup = '$_GET[code]' order by code";
                     echo "<a class='btn btn-primary pull-right' style='margin: 10px 0;' href='" . SITE_URL . "/preparecontest/$_GET[code]'><i class='glyphicon glyphicon-edit'></i>Prepare Contest</a>";
-
-                    $query = "select * from problems where pgroup = '$_GET[code]' order by pid";
                     echo "<a class='btn btn-primary pull-right' style='margin: 10px 0;' href='" . SITE_URL . "/admincontest/$_GET[code]'><i class='glyphicon glyphicon-edit'></i> Edit</a>";
                 } else {
                     $query = "select * from problems where pgroup = '$_GET[code]' and status != 'Deleted' order by code";

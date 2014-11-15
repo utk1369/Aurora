@@ -1,8 +1,6 @@
 <?php
 require_once 'config.php';
 require_once 'components.php';
-session_unset();
-session_destroy();
 $_SESSION['url'] = $_SERVER['REQUEST_URI']; // used by process.php to send to last visited page
 $query = "select value from admin where variable='mode'";
 $judge = DB::findOneFromQuery($query);
