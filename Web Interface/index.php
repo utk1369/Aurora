@@ -1,12 +1,10 @@
 <?php
 require_once 'config.php';
 require_once 'components.php';
-session_unset();
-session_destroy();
 $_SESSION['url'] = $_SERVER['REQUEST_URI']; // used by process.php to send to last visited page
 $query = "select value from admin where variable='mode'";
 $judge = DB::findOneFromQuery($query);
-if ($judge['value'] == 'Lockdown' && isset($_SESSION['loggedin']) && $_SESSION['team']['status'] != 'Admin') {
+if ($judge['value'] == 'Lockdown' && isset($_SESSION['loggedin']) && !isAdmin()) {
     session_destroy();
     session_regenerate_id(true);
     session_start();
@@ -120,18 +118,23 @@ if ($judge['value'] == 'Lockdown' && isset($_SESSION['loggedin']) && $_SESSION['
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="<?php echo SITE_URL; ?>">Aurora v2</a>
+                    <a class="navbar-brand" href="<?php echo SITE_URL; ?>">Aurora</a>
                 </div>
 
                 <div class="collapse navbar-collapse navbar-ex1-collapse">
                     <ul class="nav navbar-nav">
-                        <li><a href="<?php echo SITE_URL; ?>/home">Home</a></li>
-                        <li><a href="<?php echo SITE_URL; ?>/faq">FAQ</a></li>
+                        <!-- <li><a href="<?php echo SITE_URL; ?>/home">Home</a></li> -->
                         <li><a href="<?php echo SITE_URL; ?>/problems">Problems</a></li>
                         <li><a href="<?php echo SITE_URL; ?>/contests">Contests</a></li>
                         <li><a href="<?php echo SITE_URL; ?>/rankings">Rankings</a></li>
                         <li><a href="<?php echo SITE_URL; ?>/submissions">Submissions</a></li>
-                        <li><a href="<?php echo SITE_URL; ?>/contact">Contact Us</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Help <span class="caret"></span></a>
+                            <ul class="dropdown-menu navbar-nav navbar-inverse" role="menu">
+                                <li><a href="<?php echo SITE_URL; ?>/faq">FAQ</a></li>
+                                <li><a href="<?php echo SITE_URL; ?>/contact">Contact Us</a></li>
+                            </ul>
+                        </li>
                     </ul>
                     <?php if (isset($_SESSION['loggedin'])) { ?>
                         <ul class="nav navbar-nav pull-right">
@@ -201,14 +204,17 @@ if ($judge['value'] == 'Lockdown' && isset($_SESSION['loggedin']) && $_SESSION['
                         
                         <?php 
 	                        if ($judge['value'] == 'Active') {?>
-	                        	<h4 align="center">Live Contest Ranking</h4>
-	                        	<div id="live-ranking">Retrieving Ranking. . .</div>
-	                       		<script>
+	                        	<h4 align="center">Contest Ranking</h4>
+                                <div id="live-ranking">
+<?php getCurrentContestRanking(); ?>
+<a style="float:right;" href="<?php echo SITE_URL.'/rank/'.getCurrentContest(); ?>">View all</a>
+</div>
+                                <!--	                       		<script>
 		                       		var eventSource = new EventSource('<?php echo SITE_URL.'/files/LiveContestRanking.php'?>');
 		                			eventSource.addEventListener('message',function(e) {
 		                				document.getElementById('live-ranking').innerHTML = e.data;
 		                			}, false);
-								</script>                     
+								</script>                     -->
 	                    <?php }
 	                        else {
 								echo '<h4>Overall Rankings</h4>';
@@ -234,8 +240,7 @@ if ($judge['value'] == 'Lockdown' && isset($_SESSION['loggedin']) && $_SESSION['
                 </div>
             </div>
             <div class="footer">
-                Created by - Kaustubh Karkare<br/>
-                Upgraded by - Pushkar Anand
+                <a href="https://github.com/pushkar8723/Aurora" target="_blank">Aurora - An Open Source Online Judge</a>
             </div>
         </div>
     </body>
